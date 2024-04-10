@@ -1,4 +1,6 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { PayloadAction, createSlice } from "@reduxjs/toolkit"
+
+import { AppThunk } from "./store"
 
 
 export type CounterState = {
@@ -13,15 +15,27 @@ const counterSlice = createSlice({
   name: "counter",
   initialState,
   reducers: {
-    increment: (state) => {
-      state.count += 1
+    incrementSuccess: (state, action: PayloadAction<number>) => {
+      state.count += action.payload
     },
-    decrement: (state) => {
-      state.count -= 1
+    decrementSuccess: (state, action: PayloadAction<number>) => {
+      state.count -= action.payload
     }
   }
 })
 
-export const { increment, decrement } = counterSlice.actions
+
+export const incrementAsync = (): AppThunk => async (dispatch: any) => {
+  setTimeout(() => {
+    dispatch(incrementSuccess(1))
+  }, 1000)
+}
+
+export const decrementAsync = (): AppThunk => async (dispatch: any) => {
+  setTimeout(() => {
+    dispatch(decrementSuccess(1))
+  }, 1000)
+}
+export const { incrementSuccess, decrementSuccess } = counterSlice.actions
 
 export default counterSlice.reducer
